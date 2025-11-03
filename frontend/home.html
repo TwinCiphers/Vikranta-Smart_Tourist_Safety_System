@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIKRANTA - Government Tourist Registry System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Additional styles specific to home page */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
+            padding: var(--spacing-xl);
+            text-align: center;
+            border-radius: var(--radius-lg);
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-sm);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .about-text {
+            line-height: 1.8;
+        }
+
+        .about-text p {
+            margin-bottom: var(--spacing-md);
+            color: var(--dark-gray);
+            font-size: 1rem;
+        }
+
+        .action-buttons-section {
+            background: var(--gradient-overlay), 
+                        linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
+            padding: 80px var(--spacing-md);
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-buttons-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .action-buttons-section h2 {
+            color: var(--white);
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            font-weight: 800;
+            text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-buttons-section p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-xl);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .action-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn-large {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-xl);
+            min-width: 280px;
+            border-radius: var(--radius-xl);
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-xl);
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn-large::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .action-btn-large:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .action-btn-icon-large {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn-large:hover .action-btn-icon-large {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .tourist-btn-large {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .tourist-btn-large:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.5);
+            border-color: var(--accent-gold);
+        }
+
+        .official-btn-large {
+            background: var(--gradient-gold);
+            color: var(--primary-navy);
+        }
+
+        .official-btn-large:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(212, 175, 55, 0.6);
+            border-color: var(--primary-navy);
+        }
+
+        .footer-section {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 60px var(--spacing-md) var(--spacing-xl);
+            margin-top: 0;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-md);
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-xs);
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            line-height: 1.8;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent-gold);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .social-link svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--accent-gold);
+            transform: translateY(-4px);
+            border-color: var(--white);
+            box-shadow: 0 8px 16px rgba(212, 175, 55, 0.4);
+        }
+
+        .social-link:hover svg {
+            transform: scale(1.1);
+        }
+
+        .footer-bottom {
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            padding-top: var(--spacing-lg);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .authority-section {
+            margin-top: var(--spacing-xl);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            padding-top: var(--spacing-lg);
+        }
+
+        .authority-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: var(--white);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin: 0 auto;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            transition: all 0.3s ease;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .authority-toggle:hover {
+            background: var(--accent-gold);
+            color: var(--primary-navy);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .authority-toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .authority-toggle.active .authority-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .authority-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        .authority-content.show {
+            max-height: 600px;
+            opacity: 1;
+            padding-top: var(--spacing-lg);
+        }
+
+        .credential-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .credential-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .credential-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background-color: var(--white);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 80%;
+                max-width: 300px;
+                background: var(--gradient-primary);
+                flex-direction: column;
+                padding: 80px var(--spacing-lg) var(--spacing-lg);
+                box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+                transition: right 0.4s ease;
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                width: 100%;
+                padding: var(--spacing-md);
+                text-align: center;
+                border-radius: var(--radius-md);
+            }
+
+            .action-buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn-large {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#home" class="logo">
+                VIKRANTA - विक्रान्त
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#portal">Portal</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Government Tourist Registry System</h1>
+            <p>Official Blockchain-Based Identity Verification & Document Management Platform</p>
+            <p style="font-size: 1rem; opacity: 0.9;">Secure, Transparent, and Immutable Tourist Identity Management powered by Ethereum Blockchain Technology</p>
+            <div class="cta-buttons">
+                <a href="portal.html" class="btn btn-primary">
+                    <span>📋</span> Official Portal
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>🔐</span> Tourist Login
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="features" id="about">
+        <div class="container">
+            <h2>About VIKRANTA System</h2>
+            <p style="text-align: center; color: var(--dark-gray); font-size: 1.1rem; margin-bottom: var(--spacing-xl); max-width: 900px; margin-left: auto; margin-right: auto;">
+                The VIKRANTA Government Tourist Registry System is an advanced blockchain-based platform designed to provide secure, transparent, and efficient identity management for tourists visiting India.
+            </p>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p><strong>🎯 Mission:</strong> To revolutionize tourist identity management through cutting-edge blockchain technology, ensuring authenticity, security, and ease of verification for both tourists and government authorities.</p>
+                    <p><strong>🔒 Security:</strong> All tourist records are stored immutably on the Ethereum blockchain, ensuring tamper-proof documentation and complete transparency in the verification process.</p>
+                </div>
+                <div class="about-text">
+                    <p><strong>🌐 Technology:</strong> Built on Ethereum smart contracts with IPFS integration for secure document storage, providing a decentralized and reliable infrastructure for identity management.</p>
+                    <p><strong>✓ Verification:</strong> Instant verification through QR codes and unique identifiers, enabling seamless authentication at checkpoints, hotels, and tourist destinations across the country.</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Blockchain Secured</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">System Availability</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Immutable Records</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features" style="background: var(--light-gray);">
+        <div class="container">
+            <h2>System Features</h2>
+            <p style="text-align: center; color: var(--dark-gray); font-size: 1.1rem; margin-bottom: var(--spacing-xl);">
+                Comprehensive blockchain-powered features for modern identity management
+            </p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">🔐</div>
+                    <h3>Blockchain Security</h3>
+                    <p>All records stored on Ethereum blockchain with cryptographic security and immutable data storage</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">📱</div>
+                    <h3>QR Code Verification</h3>
+                    <p>Instant verification through secure QR codes for quick authentication at any checkpoint</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">🌐</div>
+                    <h3>IPFS Integration</h3>
+                    <p>Decentralized document storage using IPFS ensuring permanent and accessible records</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">🎫</div>
+                    <h3>Unique ID System</h3>
+                    <p>Short, memorable unique identifiers for easy login and record retrieval</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">✓</div>
+                    <h3>Authority Verification</h3>
+                    <p>Multi-level authority system for document verification and approval workflows</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>Real-Time Dashboard</h3>
+                    <p>Comprehensive dashboard with document status tracking and verification history</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portal Access Section -->
+    <section class="action-buttons-section" id="portal">
+        <h2>Access Portal</h2>
+        <p>Choose your role to access the appropriate portal</p>
+        
+        <div class="action-buttons-container">
+            <a href="portal.html" class="action-btn-large tourist-btn-large">
+                <div class="action-btn-icon-large">📸</div>
+                <div>Official Portal</div>
+                <div style="font-size: 0.8rem; font-weight: 400; margin-top: 8px; opacity: 0.9;">Register & Login</div>
+            </a>
+            
+            <a href="#" class="action-btn-large official-btn-large">
+                <div class="action-btn-icon-large">💼</div>
+                <div>Tourist</div>
+                <div style="font-size: 0.8rem; font-weight: 400; margin-top: 8px; opacity: 0.9;">Official Access</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-section" id="contact">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>VIKRANTA System</h3>
+                    <p>Government of India</p>
+                    <p>Ministry of Tourism</p>
+                    <p>Blockchain Identity Division</p>
+                    <p style="margin-top: var(--spacing-md);">Bangalore - 560001</p>
+                    <p>Phone: 8310539285</p>
+                    <p><a href="mailto:tech.pheonix03@gmail.com">Email: info@vikranta.gov.in</a></p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#home">Home</a>
+                    <a href="#about">About System</a>
+                    <a href="#features">Features</a>
+                    <a href="portal.html">Official Portal</a>
+                    <a href="#">Tourist Login</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <a href="#" onclick="alert('User Guide coming soon!'); return false;">User Guide</a>
+                    <a href="#" onclick="alert('Technical Documentation coming soon!'); return false;">Technical Docs</a>
+                    <a href="#" onclick="alert('API Documentation coming soon!'); return false;">API Reference</a>
+                    <a href="#" onclick="alert('FAQ section coming soon!'); return false;">FAQs</a>
+                    <a href="#" onclick="alert('Support portal coming soon!'); return false;">Support</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <p>Follow official channels for updates</p>
+                    <div class="social-links">
+                        <a href="https://x.com/TwinCiphers" class="social-link" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256">
+<g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8.53333,8.53333)"><path d="M26.37,26l-8.795,-12.822l0.015,0.012l7.93,-9.19h-2.65l-6.46,7.48l-5.13,-7.48h-6.95l8.211,11.971l-0.001,-0.001l-8.66,10.03h2.65l7.182,-8.322l5.708,8.322zM10.23,6l12.34,18h-2.1l-12.35,-18z"></path></g></g>
+</svg></a>
+                        <a href="https://github.com/TwinCiphers" class="social-link" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0,0,256,256">
+<g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M17.791,46.836c0.711,-0.306 1.209,-1.013 1.209,-1.836v-5.4c0,-0.197 0.016,-0.402 0.041,-0.61c-0.014,0.004 -0.027,0.007 -0.041,0.01c0,0 -3,0 -3.6,0c-1.5,0 -2.8,-0.6 -3.4,-1.8c-0.7,-1.3 -1,-3.5 -2.8,-4.7c-0.3,-0.2 -0.1,-0.5 0.5,-0.5c0.6,0.1 1.9,0.9 2.7,2c0.9,1.1 1.8,2 3.4,2c2.487,0 3.82,-0.125 4.622,-0.555c0.934,-1.389 2.227,-2.445 3.578,-2.445v-0.025c-5.668,-0.182 -9.289,-2.066 -10.975,-4.975c-3.665,0.042 -6.856,0.405 -8.677,0.707c-0.058,-0.327 -0.108,-0.656 -0.151,-0.987c1.797,-0.296 4.843,-0.647 8.345,-0.714c-0.112,-0.276 -0.209,-0.559 -0.291,-0.849c-3.511,-0.178 -6.541,-0.039 -8.187,0.097c-0.02,-0.332 -0.047,-0.663 -0.051,-0.999c1.649,-0.135 4.597,-0.27 8.018,-0.111c-0.079,-0.5 -0.13,-1.011 -0.13,-1.543c0,-1.7 0.6,-3.5 1.7,-5c-0.5,-1.7 -1.2,-5.3 0.2,-6.6c2.7,0 4.6,1.3 5.5,2.1c1.699,-0.701 3.599,-1.101 5.699,-1.101c2.1,0 4,0.4 5.6,1.1c0.9,-0.8 2.8,-2.1 5.5,-2.1c1.5,1.4 0.7,5 0.2,6.6c1.1,1.5 1.7,3.2 1.6,5c0,0.484 -0.045,0.951 -0.11,1.409c3.499,-0.172 6.527,-0.034 8.204,0.102c-0.002,0.337 -0.033,0.666 -0.051,0.999c-1.671,-0.138 -4.775,-0.28 -8.359,-0.089c-0.089,0.336 -0.197,0.663 -0.325,0.98c3.546,0.046 6.665,0.389 8.548,0.689c-0.043,0.332 -0.093,0.661 -0.151,0.987c-1.912,-0.306 -5.171,-0.664 -8.879,-0.682c-1.665,2.878 -5.22,4.755 -10.777,4.974v0.031c2.6,0 5,3.9 5,6.6v5.4c0,0.823 0.498,1.53 1.209,1.836c9.161,-3.032 15.791,-11.672 15.791,-21.836c0,-12.682 -10.317,-23 -23,-23c-12.683,0 -23,10.318 -23,23c0,10.164 6.63,18.804 15.791,21.836z"></path></g></g>
+</svg></a>
+                        <a href="https://www.linkedin.com/in/deepak-p-s-639918295?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256">
+<g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,2c-12.682,0 -23,10.317 -23,23c0,12.683 10.318,23 23,23c12.682,0 23,-10.317 23,-23c0,-12.683 -10.318,-23 -23,-23zM18,35h-4v-15h4zM16,17c-1.105,0 -2,-0.895 -2,-2c0,-1.105 0.895,-2 2,-2c1.105,0 2,0.895 2,2c0,1.105 -0.895,2 -2,2zM37,35h-4v-5v-2.5c0,-1.925 -1.575,-3.5 -3.5,-3.5c-1.925,0 -3.5,1.575 -3.5,3.5v7.5h-4v-15h4v1.816c1.168,-1.122 2.752,-1.816 4.5,-1.816c3.59,0 6.5,2.91 6.5,6.5z"></path></g></g>
+</svg></a>
+                        <a href="https://youtube.com/@twin-ciphers?si=GzEccz6kU-vM1kfM" class="social-link" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256">
+<g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M44.89844,14.5c-0.39844,-2.19922 -2.29687,-3.80078 -4.5,-4.30078c-3.29687,-0.69922 -9.39844,-1.19922 -16,-1.19922c-6.59766,0 -12.79687,0.5 -16.09766,1.19922c-2.19922,0.5 -4.10156,2 -4.5,4.30078c-0.40234,2.5 -0.80078,6 -0.80078,10.5c0,4.5 0.39844,8 0.89844,10.5c0.40234,2.19922 2.30078,3.80078 4.5,4.30078c3.5,0.69922 9.5,1.19922 16.10156,1.19922c6.60156,0 12.60156,-0.5 16.10156,-1.19922c2.19922,-0.5 4.09766,-2 4.5,-4.30078c0.39844,-2.5 0.89844,-6.10156 1,-10.5c-0.20312,-4.5 -0.70312,-8 -1.20312,-10.5zM19,32v-14l12.19922,7z"></path></g></g>
+</svg></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 VIKRANTA - Government Tourist Registry System. All rights reserved.</p>
+                <p style="margin-top: var(--spacing-xs);">Powered by Ethereum Blockchain | Ministry of Tourism, Government of India</p>
+            </div>
+            
+            <!-- Hidden Authority Section -->
+            <div class="authority-section">
+                <button class="authority-toggle" id="authorityToggle" onclick="toggleAuthority()">
+                    <span>System Credentials & Certifications</span>
+                    <span class="authority-toggle-icon">▼</span>
+                </button>
+                
+                <div class="authority-content" id="authorityContent">
+                    <div class="credential-grid">
+                        <div class="credential-item">
+                            <strong>🔒 Blockchain Certified</strong><br>
+                            Ethereum Smart Contract Audited
+                        </div>
+                        <div class="credential-item">
+                            <strong>🏛️ Government Approved</strong><br>
+                            Ministry of Tourism License #GOV-2024-BT-789
+                        </div>
+                        <div class="credential-item">
+                            <strong>🌐 IPFS Integration</strong><br>
+                            Decentralized Storage Protocol
+                        </div>
+                        <div class="credential-item">
+                            <strong>✓ ISO 27001 Certified</strong><br>
+                            Information Security Management
+                        </div>
+                        <div class="credential-item">
+                            <strong>🔐 Data Protection</strong><br>
+                            GDPR & IT Act 2000 Compliant
+                        </div>
+                        <div class="credential-item">
+                            <strong>📞 Official Contact</strong><br>
+                            <a href="mailto:tech.pheonix03@gmail.com">support@vikranta.gov.in</a>
+                        </div>
+                        <div class="credential-item" style="background: rgba(212, 175, 55, 0.2); border-color: var(--accent-gold); text-align: center;">
+                            <a href="authority-login.html" class="btn btn-secondary" style="display: inline-block; margin-top: 10px;">
+                                <span>🔐</span> Authority Access
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#') && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Toggle Authority Section
+        function toggleAuthority() {
+            const content = document.getElementById('authorityContent');
+            const toggle = document.getElementById('authorityToggle');
+            
+            content.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollY = window.pageYOffset;
+
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

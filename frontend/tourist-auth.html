@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Registration & Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .tab-button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            background: #e9ecef;
+            color: #001f54;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-button.active {
+            background: #001f54;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tab-button:hover {
+            background: #d4af37;
+            color: white;
+        }
+
+        .tab-button.active:hover {
+            background: #001433;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #001f54;
+            text-align: center;
+            border: 2px solid #001f54;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            color: #001f54;
+        }
+
+        .info-box p {
+            color: #003d82;
+            margin: 5px 0 0 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #001f54 0%, #003d82 50%, #0066cc 100%);
+            position: relative;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        #uniqueIdDisplay {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+
+        .copy-button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background: #5568d3;
+        }
+
+        /* Ensure container is properly styled and clickable */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 80px auto 40px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .container h1 {
+            color: #001f54;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .container input,
+        .container textarea,
+        .container button {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .container input,
+        .container textarea {
+            cursor: text;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <a href="portal.html" class="back-button">← Back to Portal</a>
+
+    <div class="container">
+        <h1>👤 Tourist Portal</h1>
+
+        <div class="tab-container">
+            <button class="tab-button active" onclick="switchTab('register')">New Registration</button>
+            <button class="tab-button" onclick="switchTab('login')">Existing User Login</button>
+        </div>
+
+        <!-- Registration Tab -->
+        <div id="register-tab" class="tab-content active">
+            <div class="info-box">
+                <strong>📝 New Tourist Registration</strong>
+                <p>Register once and receive a unique ID for future logins. No wallet required!</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nationality">Nationality *</label>
+                    <input type="text" id="nationality" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="passportNumber">Passport Number</label>
+                    <input type="text" id="passportNumber">
+                </div>
+
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth</label>
+                    <input type="date" id="dateOfBirth">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn">Register</button>
+                <div id="registerStatus" class="status-message"></div>
+            </form>
+        </div>
+
+        <!-- Login Tab -->
+        <div id="login-tab" class="tab-content">
+            <div class="info-box">
+                <strong>🔑 Login with Your Unique ID</strong>
+                <p>Enter the unique ID you received during registration</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUniqueId">Unique ID *</label>
+                    <input type="text" id="loginUniqueId" required placeholder="Enter your unique ID">
+                </div>
+
+                <button type="submit" class="btn">Login</button>
+                <div id="loginStatus" class="status-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Use relative URL to go through nginx proxy
+        const API_URL = '';
+
+        // Tab switching
+        function switchTab(tab) {
+            const registerTab = document.getElementById('register-tab');
+            const loginTab = document.getElementById('login-tab');
+            const tabs = document.querySelectorAll('.tab-button');
+
+            tabs.forEach(t => t.classList.remove('active'));
+
+            if (tab === 'register') {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                tabs[0].classList.add('active');
+            } else {
+                registerTab.classList.remove('active');
+                loginTab.classList.add('active');
+                tabs[1].classList.add('active');
+            }
+        }
+
+        // Registration form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const statusDiv = document.getElementById('registerStatus');
+            statusDiv.textContent = 'Registering... Please wait.';
+            statusDiv.className = 'status-message';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                nationality: document.getElementById('nationality').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                passportNumber: document.getElementById('passportNumber').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                address: document.getElementById('address').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/tourist/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    statusDiv.innerHTML = `
+                        <div style="color: green; font-weight: bold; margin-top: 20px;">
+                            ✅ Registration Successful!
+                        </div>
+                        <div style="background: #f0f0f0; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                            <strong>⚠️ SAVE THIS UNIQUE ID:</strong>
+                            <div id="uniqueIdDisplay">${data.uniqueId}</div>
+                            <button class="copy-button" onclick="copyUniqueId('${data.uniqueId}')">📋 Copy ID</button>
+                            <p style="color: #666; margin-top: 15px;">
+                                You will need this ID to login and access your dashboard.
+                            </p>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button class="btn" onclick="window.location.href='dashboard.html?uniqueId=${data.uniqueId}'">
+                                Go to Dashboard
+                            </button>
+                        </div>
+                    `;
+                    document.getElementById('registerForm').reset();
+                } else {
+                    statusDiv.textContent = '❌ ' + (data.message || 'Registration failed');
+                    statusDiv.className = 'status-message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.textContent = '❌ Error: ' + error.message;
+                statusDiv.className = 'status-message error';
+            }
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const statusDiv = document.getElementById('loginStatus');
+            const uniqueId = document.getElementById('loginUniqueId').value.trim();
+
+            if (!uniqueId) {
+                statusDiv.textContent = '❌ Please enter your unique ID';
+                statusDiv.className = 'status-message error';
+                return;
+            }
+
+            statusDiv.textContent = 'Verifying... Please wait.';
+            statusDiv.className = 'status-message';
+
+            try {
+                // Verify the unique ID exists in the blockchain
+                const response = await fetch(`${API_URL}/api/tourist/info/${uniqueId}`);
+                const data = await response.json();
+
+                if (data.success && data.data && data.data.name) {
+                    statusDiv.textContent = '✅ Login successful! Redirecting...';
+                    statusDiv.className = 'status-message success';
+                    
+                    setTimeout(() => {
+                        window.location.href = `dashboard.html?uniqueId=${uniqueId}`;
+                    }, 1000);
+                } else {
+                    statusDiv.textContent = '❌ Invalid unique ID. Please check and try again.';
+                    statusDiv.className = 'status-message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.textContent = '❌ Login failed: ' + error.message;
+                statusDiv.className = 'status-message error';
+            }
+        });
+
+        // Copy unique ID to clipboard
+        function copyUniqueId(id) {
+            navigator.clipboard.writeText(id).then(() => {
+                alert('Unique ID copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
+</body>
+</html>

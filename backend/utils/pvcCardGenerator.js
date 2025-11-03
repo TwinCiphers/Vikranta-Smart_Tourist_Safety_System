@@ -216,16 +216,16 @@ async function generatePVCCard(touristData) {
             qrData.checksum = crypto.createHash('sha256').update(checksumData).digest('hex').substring(0, 16);
             
             const qrBuffer = await QRCode.toBuffer(JSON.stringify(qrData), { 
-                errorCorrectionLevel: 'H',
-                width: 256,
-                margin: 1,
+                errorCorrectionLevel: 'H',  // High error correction (30% damage recovery)
+                width: 300,                  // High resolution for better scanning
+                margin: 2,                   // Proper quiet zone for scanner detection
                 color: {
-                    dark: '#000000',
-                    light: '#ffffff'
+                    dark: '#000000',         // Pure black for maximum contrast
+                    light: '#ffffff'         // Pure white for maximum contrast
                 }
             });
             
-            // Add QR code
+            // Add QR code (scaled to fit card)
             doc.image(qrBuffer, 164, 55, { width: 64, height: 64 });
             
             // QR Label

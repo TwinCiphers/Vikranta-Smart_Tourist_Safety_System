@@ -3,57 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tourist Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Tourist Dashboard - VIKRANTA</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: var(--spacing-xl) 0;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .dashboard-content {
+            max-width: 1000px;
+            margin: var(--spacing-xl) auto;
+            padding: 0 var(--spacing-md);
+        }
+        
+        .info-section {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+        
+        .info-item {
+            padding: var(--spacing-md);
+            background: var(--light-gray);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .info-item strong {
+            color: var(--primary-navy);
+            display: block;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-verified {
+            background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, var(--warning) 0%, #ffab00 100%);
+            color: var(--primary-navy);
+        }
+        
+        .qr-section {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+            border-radius: var(--radius-lg);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .qr-code {
+            max-width: 350px;
+            margin: var(--spacing-lg) auto;
+            padding: var(--spacing-lg);
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 8px 24px rgba(0, 31, 84, 0.15);
+            border: 3px solid var(--accent-gold);
+        }
+        
+        .qr-code canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: var(--radius-md);
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        .pvc-card-container {
+            max-width: 450px;
+            margin: var(--spacing-lg) auto;
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+        
+        .pvc-header {
+            text-align: center;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .pvc-header h3 {
+            margin: 0;
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .pvc-body {
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+        
+        .pvc-info {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .pvc-info-item {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .pvc-info-item strong {
+            color: var(--accent-gold);
+            display: block;
+            font-size: 0.85rem;
+        }
+        
+        .pvc-info-item span {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .pvc-qr {
+            background: white;
+            padding: var(--spacing-sm);
+            border-radius: var(--radius-md);
+            min-width: 120px;
+        }
+        
+        .pvc-qr canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--spacing-xl);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: var(--spacing-xl);
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <h1 class="logo">🌍 Tourist Dashboard</h1>
-            <button id="disconnectBtn" class="btn btn-secondary">Disconnect</button>
-        </div>
-    </nav>
+    <div class="dashboard-header">
+        <h1>🎫 Tourist Dashboard</h1>
+        <p>Welcome to your VIKRANTA profile</p>
+    </div>
 
-    <div class="container dashboard-container">
-        <div class="profile-section">
-            <h2>Your Profile</h2>
-            <div id="profileInfo" class="info-card"></div>
+    <div class="dashboard-content">
+        <div id="loadingDiv" class="loading">
+            Loading your information... Please wait.
         </div>
-        
-        <div class="documents-section">
-            <h2>Upload Documents</h2>
-            <form id="documentUploadForm">
-                <div class="form-group">
-                    <label>Document Type</label>
-                    <select id="documentType">
-                        <option value="passport">Passport</option>
-                        <option value="visa">Visa</option>
-                        <option value="id_card">ID Card</option>
-                        <option value="travel_insurance">Travel Insurance</option>
-                    </select>
+
+        <div id="dashboardContent" style="display: none;">
+            <div class="info-section">
+                <h2>Personal Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>👤 Name</strong>
+                        <span id="touristName">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>🌍 Nationality</strong>
+                        <span id="touristNationality">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>🎫 Unique ID</strong>
+                        <span id="touristId">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>✓ Status</strong>
+                        <span id="touristStatus">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>Registration Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>📅 Registration Date</strong>
+                        <span id="regDate">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>✅ Verification Date</strong>
+                        <span id="verifyDate">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>⏰ Expiration Date</strong>
+                        <span id="expDate">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>🔄 Active Status</strong>
+                        <span id="activeStatus">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qr-section" id="qrSection" style="display: none;">
+                <h2>🎴 Your Digital ID Card</h2>
+                <p>Scan this code for instant verification</p>
+                
+                <div class="pvc-card-container" id="pvcCard">
+                    <div class="pvc-header">
+                        <h3>🇮🇳 VIKRANTA</h3>
+                        <p style="margin: 5px 0 0 0; font-size: 0.85rem;">Government Tourist Registry</p>
+                    </div>
+                    <div class="pvc-body">
+                        <div class="pvc-info">
+                            <div class="pvc-info-item">
+                                <strong>NAME</strong>
+                                <span id="pvcName">-</span>
+                            </div>
+                            <div class="pvc-info-item">
+                                <strong>NATIONALITY</strong>
+                                <span id="pvcNationality">-</span>
+                            </div>
+                            <div class="pvc-info-item">
+                                <strong>ID NUMBER</strong>
+                                <span id="pvcId">-</span>
+                            </div>
+                            <div class="pvc-info-item">
+                                <strong>STATUS</strong>
+                                <span style="color: var(--accent-gold);">✓ VERIFIED</span>
+                            </div>
+                        </div>
+                        <div class="pvc-qr" id="qrDisplay"></div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label>Upload Document</label>
-                    <input type="file" id="documentFile" accept="image/*,application/pdf">
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </form>
-            
-            <div id="documentsListing" class="documents-list"></div>
+                <button class="btn btn-primary" onclick="downloadPVCCard()" style="margin-top: var(--spacing-lg);">
+                    � Download PVC Card
+                </button>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="window.location.href='portal.html'">🏠 Back to Portal</button>
+                <button class="btn btn-secondary" onclick="window.location.href='home.html'">🏠 Home</button>
+            </div>
         </div>
-        
-        <div class="qr-section" id="qrSection" style="display:none;">
-            <h2>Your QR Code</h2>
-            <div id="qrDisplay"></div>
-            <button id="downloadPVC" class="btn btn-primary">Download PVC Card</button>
+
+        <div id="errorDiv" style="display: none;" class="info-section">
+            <h2>❌ Error</h2>
+            <p id="errorMessage" style="color: var(--danger);"></p>
+            <button class="btn btn-primary" onclick="window.location.href='tourist-auth.html'">← Back to Login</button>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@4.0.0/dist/web3.min.js"></script>
-    <script src="js/web3-connection.js?v=2"></script>
-    <script src="js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+        const API_URL = '';
+        let touristData = null;
+
+        // Get unique ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const uniqueId = urlParams.get('uniqueId');
+
+        if (!uniqueId) {
+            showError('No unique ID provided. Please login first.');
+        } else {
+            loadTouristData();
+        }
+
+        async function loadTouristData() {
+            try {
+                const response = await fetch(`${API_URL}/api/tourist/info/${uniqueId}`);
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    touristData = data.data;
+                    displayTouristData();
+                } else {
+                    showError(data.message || 'Failed to load tourist data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error loading data: ' + error.message);
+            }
+        }
+
+        function displayTouristData() {
+            document.getElementById('loadingDiv').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+
+            // Personal Info
+            document.getElementById('touristName').textContent = touristData.name || '-';
+            document.getElementById('touristNationality').textContent = touristData.nationality || '-';
+            document.getElementById('touristId').textContent = uniqueId;
+
+            // Status
+            const statusSpan = document.getElementById('touristStatus');
+            if (touristData.isVerified) {
+                statusSpan.innerHTML = '<span class="status-badge status-verified">✓ Verified</span>';
+            } else {
+                statusSpan.innerHTML = '<span class="status-badge status-pending">⏳ Pending</span>';
+            }
+
+            // Dates
+            document.getElementById('regDate').textContent = formatDate(touristData.registrationDate);
+            document.getElementById('verifyDate').textContent = touristData.verificationDate ? formatDate(touristData.verificationDate) : 'Not yet verified';
+            document.getElementById('expDate').textContent = formatDate(touristData.expirationDate);
+            document.getElementById('activeStatus').textContent = touristData.isActive ? '✅ Active' : '❌ Inactive';
+
+            // Generate PVC Card if verified
+            if (touristData.isVerified && touristData.qrCodeHash) {
+                document.getElementById('qrSection').style.display = 'block';
+                
+                // Fill PVC card details
+                document.getElementById('pvcName').textContent = touristData.name || '-';
+                document.getElementById('pvcNationality').textContent = touristData.nationality || '-';
+                document.getElementById('pvcId').textContent = uniqueId;
+                
+                generateQRCode();
+            }
+        }
+
+        function generateQRCode() {
+            // Professional QR code data structure (matching backend)
+            const qrData = {
+                // ISO 8601 standard
+                version: '1.0',
+                standard: 'BLOCKCHAIN-TOURIST-ID',
+                
+                // Tourist Identification
+                touristId: uniqueId,
+                qrCodeHash: touristData.qrCodeHash || uniqueId.substring(0, 16),
+                
+                // Personal Information
+                fullName: touristData.name,
+                nationality: touristData.nationality,
+                
+                // Verification Details
+                issueDate: touristData.verificationDate 
+                    ? new Date(touristData.verificationDate * 1000).toISOString()
+                    : new Date().toISOString(),
+                expirationDate: touristData.expirationDate 
+                    ? new Date(touristData.expirationDate * 1000).toISOString()
+                    : null,
+                
+                // Authority Information
+                issuingAuthority: 'VIKRANTA Tourism Department',
+                countryCode: 'IND',
+                
+                // Verification Endpoint
+                verificationUrl: `${window.location.origin}/api/verify/${touristData.qrCodeHash || uniqueId}`,
+                
+                // Security
+                generatedAt: new Date().toISOString(),
+                checksum: null // Will be calculated
+            };
+            
+            // Generate checksum for integrity verification
+            const checksumData = `${qrData.touristId}:${qrData.issueDate}:${qrData.expirationDate}`;
+            // Simple hash for frontend (backend uses crypto module)
+            let hash = 0;
+            for (let i = 0; i < checksumData.length; i++) {
+                const char = checksumData.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            qrData.checksum = Math.abs(hash).toString(16).substring(0, 16).padStart(16, '0');
+
+            QRCode.toCanvas(
+                JSON.stringify(qrData),
+                {
+                    width: 300,  // Larger size for better scanning
+                    margin: 2,   // More margin for scanner padding
+                    errorCorrectionLevel: 'H', // High error correction (30% recovery)
+                    color: {
+                        dark: '#000000',  // Pure black for better contrast
+                        light: '#ffffff'  // Pure white for better contrast
+                    }
+                },
+                function (err, canvas) {
+                    if (err) {
+                        console.error('QR generation error:', err);
+                        return;
+                    }
+                    document.getElementById('qrDisplay').innerHTML = '';
+                    document.getElementById('qrDisplay').appendChild(canvas);
+                }
+            );
+        }
+
+        async function downloadPVCCard() {
+            try {
+                // Show loading state
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '⏳ Generating PDF...';
+                btn.disabled = true;
+                
+                // Call backend API to generate professional PDF PVC card
+                const response = await fetch(`${API_URL}/api/tourist/pvc-card/${uniqueId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate PVC card');
+                }
+                
+                // Get the PDF as blob
+                const blob = await response.blob();
+                
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `VIKRANTA-PVC-${uniqueId}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+                
+                // Restore button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                alert('✅ PVC Card downloaded successfully!');
+                
+            } catch (error) {
+                console.error('PVC card download error:', error);
+                alert('❌ Failed to download PVC card: ' + error.message);
+                
+                // Restore button
+                const btn = event.target;
+                btn.innerHTML = '💳 Download PVC Card';
+                btn.disabled = false;
+            }
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp || timestamp === '0') return '-';
+            const date = new Date(parseInt(timestamp) * 1000);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        function showError(message) {
+            document.getElementById('loadingDiv').style.display = 'none';
+            document.getElementById('errorDiv').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
 </body>
 </html>

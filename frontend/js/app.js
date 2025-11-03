@@ -1,7 +1,7 @@
 // Main application JavaScript
 
-// API Base URL
-const API_BASE_URL = 'http://localhost:3000/api';
+// API Base URL - Use relative path to go through nginx proxy
+const API_BASE_URL = '/api';
 
 // Utility function to show notifications
 function showNotification(message, type = 'info') {

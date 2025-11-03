@@ -7,6 +7,7 @@ const { uploadToIPFS } = require('../config/ipfs');
 const { encrypt } = require('../utils/encryption');
 const { generateQRCode } = require('../utils/qrGenerator');
 const { generatePVCCard } = require('../utils/pvcCardGenerator');
+const { getMasterAccount, signAndSendTransaction } = require('../config/wallet');
 
 // Configure multer for file uploads
 const upload = multer({ 
@@ -17,15 +18,18 @@ const upload = multer({
 // POST /api/tourist/register - Register new tourist
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, phone, nationality, passportNumber, dateOfBirth, address, walletAddress } = req.body;
+        const { name, email, phone, nationality, passportNumber, dateOfBirth, address } = req.body;
 
         // Validate required fields
-        if (!name || !nationality || !walletAddress) {
+        if (!name || !nationality) {
             return res.status(400).json({ 
                 success: false, 
-                message: 'Name, nationality, and wallet address are required' 
+                message: 'Name and nationality are required' 
             });
         }
+        
+        // Get master wallet account for server-side signing
+        const masterAccount = await getMasterAccount();
 
         // Generate short alphanumeric unique ID (configurable length via env SHORT_ID_LENGTH)
         const ID_LENGTH = parseInt(process.env.SHORT_ID_LENGTH, 10) || 10; // default to 10
@@ -51,21 +55,21 @@ router.post('/register', async (req, res) => {
             address
         }));
 
-        console.log('Registering tourist:', { uniqueId, name, nationality, walletAddress });
+        console.log('Registering tourist:', { uniqueId, name, nationality });
+        console.log('Using master wallet for transaction:', masterAccount.address);
 
-        // Register on blockchain
-        // Contract now expects: registerTourist(uniqueId, name, nationality, encryptedDataHash, touristAddress)
-        // Admin pays for gas, but tourist owns the record
-        const accounts = await web3.eth.getAccounts();
-        const adminAccount = accounts[0];
-        console.log('Using admin account for gas:', adminAccount);
-        console.log('Tourist will own the record:', walletAddress);
+        // Register on blockchain using server-side wallet
+        // Master wallet signs and sends the transaction
+        const tx = touristRegistryContract.methods.registerTourist(
+            uniqueId, 
+            name, 
+            nationality, 
+            encryptedData, 
+            masterAccount.address // Tourist record is owned by master wallet
+        );
         
-        const tx = await touristRegistryContract.methods
-            .registerTourist(uniqueId, name, nationality, encryptedData, walletAddress)
-            .send({ from: adminAccount, gas: 3000000 });
-
-        console.log('Transaction successful:', tx.transactionHash);
+        const receipt = await signAndSendTransaction(tx);
+        console.log('Transaction successful:', receipt.transactionHash);
 
         // Track this tourist for authority panel
         const authorityRoute = require('./authority');
@@ -76,8 +80,9 @@ router.post('/register', async (req, res) => {
         res.json({
             success: true,
             uniqueId,
-            transactionHash: tx.transactionHash,
-            message: 'Tourist registered successfully'
+            transactionHash: receipt.transactionHash,
+            walletAddress: masterAccount.address,
+            message: 'Tourist registered successfully. Save your unique ID for login.'
         });
     } catch (error) {
         console.error('Registration error:', error);
@@ -114,18 +119,17 @@ router.post('/upload-document', upload.single('document'), async (req, res) => {
         console.log('IPFS Hash:', ipfsHash);
 
         console.log('Updating blockchain...');
-        // Update blockchain
-        const accounts = await web3.eth.getAccounts();
-        const tx = await touristRegistryContract.methods
-            .uploadDocument(uniqueId, documentType, ipfsHash)
-            .send({ from: accounts[0], gas: 3000000 });
+        // Update blockchain using master wallet
+        const masterAccount = await getMasterAccount();
+        const tx = touristRegistryContract.methods.uploadDocument(uniqueId, documentType, ipfsHash);
+        const receipt = await signAndSendTransaction(tx);
 
-        console.log('Document uploaded successfully:', tx.transactionHash);
+        console.log('Document uploaded successfully:', receipt.transactionHash);
 
         res.json({
             success: true,
             ipfsHash,
-            transactionHash: tx.transactionHash,
+            transactionHash: receipt.transactionHash,
             message: 'Document uploaded successfully'
         });
     } catch (error) {

@@ -7,6 +7,7 @@ const expirationChecker = require('../services/expirationChecker');
 const { generateToken, authenticateJWT, requireRole } = require('../middleware/auth');
 const { trackFailedAttempt, resetAttempts, getRemainingAttempts, checkBan } = require('../middleware/bruteForceProtection');
 const logger = require('../middleware/securityLogger');
+const { setParentWallet, getMasterAccount, signAndSendTransaction } = require('../config/wallet');
 
 // Simple in-memory storage for registered tourists (in production, use a database)
 let registeredTourists = [];
@@ -65,30 +66,75 @@ router.post('/login', checkBan, async (req, res) => {
         }
         
         // Check on blockchain if address is an authority
-        const isAuthority = await touristRegistryContract.methods
+        let isAuthority = await touristRegistryContract.methods
             .authorities(address)
             .call();
         
         console.log('Is authority:', isAuthority);
         
+        // If not an authority, automatically add them using the admin account
         if (!isAuthority) {
-            // Track failed attempt
-            const banned = trackFailedAttempt(clientIP);
-            const remaining = getRemainingAttempts(clientIP);
+            console.log('⚠️ Account not an authority. Auto-adding...');
             
-            logger.authFailure('not_authority', clientIP, {
-                address,
-                remainingAttempts: remaining,
-                banned
-            });
-            
-            return res.status(401).json({
-                success: false,
-                message: 'Not authorized. Only registered authorities can access this panel.',
-                remainingAttempts: remaining,
-                banned
-            });
+            try {
+                // Get admin account (Account 0 from Ganache)
+                const accounts = await web3.eth.getAccounts();
+                const adminAccount = accounts[0]; // Account 0 is the admin/deployer
+                
+                console.log('Admin account:', adminAccount);
+                console.log('Adding authority:', address);
+                
+                // Add the authority using admin account
+                const addAuthorityTx = touristRegistryContract.methods.addAuthority(address);
+                const gas = await addAuthorityTx.estimateGas({ from: adminAccount });
+                
+                await addAuthorityTx.send({
+                    from: adminAccount,
+                    gas: Math.floor(gas * 1.2)
+                });
+                
+                console.log('✅ Successfully added as authority!');
+                
+                // Verify it was added
+                isAuthority = await touristRegistryContract.methods
+                    .authorities(address)
+                    .call();
+                
+                if (!isAuthority) {
+                    throw new Error('Failed to add authority');
+                }
+                
+                logger.authSuccess(address, clientIP, { 
+                    action: 'auto_added_authority',
+                    addedBy: adminAccount 
+                });
+                
+            } catch (autoAddError) {
+                console.error('❌ Failed to auto-add authority:', autoAddError);
+                
+                // Track failed attempt
+                const banned = trackFailedAttempt(clientIP);
+                const remaining = getRemainingAttempts(clientIP);
+                
+                logger.authFailure('not_authority_auto_add_failed', clientIP, {
+                    address,
+                    error: autoAddError.message,
+                    remainingAttempts: remaining,
+                    banned
+                });
+                
+                return res.status(401).json({
+                    success: false,
+                    message: 'Not authorized and failed to add as authority. Please contact admin.',
+                    error: autoAddError.message,
+                    remainingAttempts: remaining,
+                    banned
+                });
+            }
         }
+        
+        // Set this authority as the parent wallet (all child operations will use this)
+        setParentWallet(address);
         
         // Generate JWT token
         const token = generateToken(address, 'authority', '24h');
@@ -98,18 +144,20 @@ router.post('/login', checkBan, async (req, res) => {
         
         logger.authSuccess(address, clientIP, {
             action: 'login_success',
-            tokenGenerated: true
+            tokenGenerated: true,
+            parentWalletSet: true
         });
         
         res.json({
             success: true,
             isAuthority: true,
-            message: 'Authority verified and logged in',
+            message: 'Authority verified and logged in. You are now the parent wallet for all operations.',
             token,
             expiresIn: '24h',
             user: {
                 address,
-                role: 'authority'
+                role: 'authority',
+                isParentWallet: true
             }
         });
         
@@ -122,6 +170,29 @@ router.post('/login', checkBan, async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Login failed: ' + error.message
+        });
+    }
+});
+
+// GET /api/authority/parent-wallet-status - Check parent wallet connection status
+router.get('/parent-wallet-status', async (req, res) => {
+    try {
+        const { getParentWallet, isParentConnected } = require('../config/wallet');
+        const parentWallet = getParentWallet();
+        
+        res.json({
+            success: true,
+            isConnected: isParentConnected(),
+            parentAddress: parentWallet.address,
+            message: isParentConnected() 
+                ? 'Parent wallet connected' 
+                : 'No parent wallet connected. Authority must login with MetaMask.'
+        });
+    } catch (error) {
+        console.error('Parent wallet status error:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
 });
@@ -224,15 +295,14 @@ router.post('/verify', authenticateJWT, requireRole('authority'), async (req, re
 
         if (!approved) {
             // Handle rejection - mark as inactive on blockchain
-            const accounts = await web3.eth.getAccounts();
+            const masterAccount = await getMasterAccount();
             
             try {
-                // Call rejectTourist on blockchain to set isActive = false
-                const tx = await touristRegistryContract.methods
-                    .rejectTourist(uniqueId)
-                    .send({ from: accounts[0], gas: 3000000 });
+                // Call rejectTourist on blockchain using master wallet
+                const tx = touristRegistryContract.methods.rejectTourist(uniqueId);
+                const receipt = await signAndSendTransaction(tx);
                 
-                console.log('Tourist rejected on blockchain:', tx.transactionHash);
+                console.log('Tourist rejected on blockchain:', receipt.transactionHash);
                 
                 // Also remove from in-memory array
                 const index = registeredTourists.findIndex(t => t.uniqueId === uniqueId);
@@ -247,7 +317,7 @@ router.post('/verify', authenticateJWT, requireRole('authority'), async (req, re
                     rejectionReason,
                     rejectedBy: req.user.userId,
                     rejectionDate: new Date().toISOString(),
-                    transactionHash: tx.transactionHash
+                    transactionHash: receipt.transactionHash
                 };
                 
                 console.log('Tourist registration rejected:', rejectionData);
@@ -285,13 +355,12 @@ router.post('/verify', authenticateJWT, requireRole('authority'), async (req, re
         
         console.log('Using QR reference:', qrReference);
 
-        // Verify on blockchain with QR code reference and validity period
-        const accounts = await web3.eth.getAccounts();
-        const tx = await touristRegistryContract.methods
-            .verifyTourist(uniqueId, qrReference, validityDays)
-            .send({ from: accounts[0], gas: 3000000 });
+        // Verify on blockchain using master wallet
+        const masterAccount = await getMasterAccount();
+        const tx = touristRegistryContract.methods.verifyTourist(uniqueId, qrReference, validityDays);
+        const receipt = await signAndSendTransaction(tx);
 
-        console.log('Tourist verified on blockchain:', tx.transactionHash);
+        console.log('Tourist verified on blockchain:', receipt.transactionHash);
         
         // Calculate expiration date timestamp
         const expirationTimestamp = Math.floor(Date.now() / 1000) + (validityDays * 24 * 60 * 60);
@@ -320,7 +389,7 @@ router.post('/verify', authenticateJWT, requireRole('authority'), async (req, re
 
         res.json({
             success: true,
-            transactionHash: tx.transactionHash,
+            transactionHash: receipt.transactionHash,
             qrCode: qrCodeDataURL,
             validityDays: validityDays,
             expirationDate: expirationDate.toISOString(),

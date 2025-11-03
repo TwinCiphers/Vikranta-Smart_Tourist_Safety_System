@@ -73,6 +73,13 @@
         <div class="login-header">
             <h1>👮 Authority Panel Login</h1>
             <p>Secure Access for Authorized Personnel Only</p>
+            <div style="background: #e0f2fe; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #0284c7;">
+                <strong>🔗 Parent Wallet Connection</strong>
+                <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #0369a1;">
+                    When you connect MetaMask, you become the <strong>parent wallet</strong>. 
+                    All tourist registrations and system operations will use your wallet connection.
+                </p>
+            </div>
         </div>
 
         <div id="alertBox" class="alert"></div>
@@ -105,13 +112,14 @@
             <ul style="margin: 10px 0 0 20px; color: #666;">
                 <li>Only authorized personnel can access the authority panel</li>
                 <li>Your wallet address must be registered as an authority</li>
+                <li><strong>You will become the parent wallet</strong> - all transactions use your connection</li>
                 <li>All actions are logged on the blockchain</li>
                 <li>Unauthorized access attempts are monitored</li>
             </ul>
         </div>
 
         <div style="text-align: center; margin-top: 30px;">
-            <a href="index.html" style="color: #1e3a8a;">← Back to Home</a>
+            <a href="home.html" style="color: #1e3a8a; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">← Back to Home</a>
         </div>
     </div>
 
@@ -219,8 +227,9 @@
                     sessionStorage.setItem('authorityWallet', account);
                     sessionStorage.setItem('authorityAuth', 'true');
                     sessionStorage.setItem('authTime', Date.now());
+                    sessionStorage.setItem('isParentWallet', 'true');
 
-                    showAlert('✅ Authentication successful! Redirecting...', 'success');
+                    showAlert('✅ Authentication successful! You are now the parent wallet. Redirecting...', 'success');
 
                     setTimeout(() => {
                         window.location.href = 'authority-panel.html';

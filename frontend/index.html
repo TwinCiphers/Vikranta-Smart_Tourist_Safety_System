@@ -3,87 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vikranta - Tourist Registration System | Home</title>
+    <title>VIKRANTA - Government Tourist Registry System</title>
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="stylesheet" href="css/style.css">
+    <meta http-equiv="refresh" content="0; url=home.html">
+    <script>
+        // Instant redirect to home page
+        window.location.href = 'home.html';
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #001f54 0%, #003d82 50%, #0066cc 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .redirect-message {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .spinner {
+            margin: 30px auto;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🌍 Tourist Registration Blockchain System</h1>
-            <p class="tagline">Secure, Decentralized, and Transparent</p>
-        </header>
-
-        <main class="home-content">
-            <section class="hero">
-                <h2>Welcome to the Future of Tourist Registration</h2>
-                <p>Our blockchain-based system ensures secure and verifiable tourist registration with encrypted data storage and immutable records.</p>
-            </section>
-
-            <section class="features">
-                <h3>Key Features</h3>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>🔐 Secure Encryption</h4>
-                        <p>AES-256 encryption for all sensitive tourist data</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>⛓️ Blockchain Verified</h4>
-                        <p>Immutable records on Ethereum blockchain</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📱 QR Code Cards</h4>
-                        <p>Digital PVC cards with unique QR codes</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📄 Document Storage</h4>
-                        <p>Decentralized storage via IPFS</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="cta-section">
-                <h3>Get Started</h3>
-                <div class="cta-buttons">
-                    <a href="register.html" class="btn btn-primary">Register as Tourist</a>
-                    <a href="login.html" class="btn btn-secondary">Tourist Login</a>
-                    <a href="authority-login.html" class="btn btn-authority">🔐 Authority Login</a>
-                </div>
-            </section>
-
-            <section class="info-section">
-                <h3>How It Works</h3>
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <h4>Register</h4>
-                        <p>Connect your MetaMask wallet and fill in your details</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <h4>Upload Documents</h4>
-                        <p>Submit required travel documents for verification</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <h4>Get Verified</h4>
-                        <p>Wait for authority verification and approval</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <h4>Receive Card</h4>
-                        <p>Download your digital PVC card with QR code</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2025 Vikranta - Tourist Registration Blockchain System. Built with ❤️ for secure travel.</p>
-        </footer>
+    <div class="redirect-message">
+        <h1>🇮🇳 VIKRANTA</h1>
+        <p>Government Tourist Registry System</p>
+        <div class="spinner"></div>
+        <p>Redirecting to home page...</p>
+        <p style="font-size: 0.9em; margin-top: 20px;">
+            <a href="home.html" style="color: #d4af37; text-decoration: none;">Click here if not redirected automatically</a>
+        </p>
     </div>
-
-    <script src="js/web3-connection.js?v=2"></script>
-    <script src="js/app.js"></script>
 </body>
 </html>
