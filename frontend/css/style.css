@@ -264,17 +264,20 @@ body::before {
     pointer-events: none;
 }
 
-.hero h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+.hero h1,
+.hero h2,
+.hero h3 {
+    font-size: clamp(1.5rem, 4.5vw, 4rem);
     margin-bottom: var(--spacing-md);
     font-weight: 800;
     letter-spacing: -1px;
-    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
+    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
     animation: fadeInUp 0.8s ease-out;
+    white-space: nowrap;
+    overflow: visible;
+    text-align: center;
+    padding: 0 20px;
 }
 
 @keyframes fadeInUp {
@@ -987,8 +990,13 @@ footer .footer-info {
 
 /* Mobile Landscape & Tablet Portrait */
 @media (max-width: 768px) {
-    .hero h1 {
-        font-size: clamp(2rem, 5vw, 2.5rem);
+    .hero h1,
+    .hero h2,
+    .hero h3 {
+        font-size: clamp(1.2rem, 4vw, 2rem);
+        white-space: nowrap;
+        padding: 0 15px;
+        color: #ffffff;
     }
     
     .hero p {
@@ -1053,8 +1061,14 @@ footer .footer-info {
         --spacing-xl: 28px;
     }
     
-    .hero h1 {
-        font-size: 1.75rem;
+    .hero h1,
+    .hero h2,
+    .hero h3 {
+        font-size: clamp(1rem, 3.5vw, 1.5rem);
+        white-space: nowrap;
+        padding: 0 10px;
+        letter-spacing: -0.5px;
+        color: #ffffff;
     }
     
     .hero p {

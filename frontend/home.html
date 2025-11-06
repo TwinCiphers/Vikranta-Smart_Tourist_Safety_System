@@ -3,10 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIKRANTA - Government Tourist Registry System</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <title>VIKRANTA - Tourist Safety System</title>
+    <link rel="icon" type="image/png" href="logo221.png">
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* Video Background Styles */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: none !important; /* Override default gradient */
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 31, 84, 0.75) 0%, rgba(0, 61, 130, 0.65) 50%, rgba(0, 102, 204, 0.55) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero::before {
+            display: none !important; /* Hide the radial gradient overlay */
+        }
+
         /* Additional styles specific to home page */
         .stats {
             display: grid;
@@ -453,7 +504,7 @@
     <nav class="navbar">
         <div class="container">
             <a href="#home" class="logo">
-                <img src="logo.png" alt="VIKRANTA Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+                <img src="logo22.png" alt="VIKRANTA Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
                 VIKRANTA - विक्रान्ता
             </a>
             <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -473,16 +524,25 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <!-- Video Background -->
+        <div class="video-background">
+            <video id="heroVideo" autoplay muted playsinline>
+                <source src="background-video.mp4" type="video/mp4">
+                <source src="background-video.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
         <div class="container">
-            <h1>Government Tourist Registry System</h1>
-            <p>Official Blockchain-Based Identity Verification & Document Management Platform</p>
-            <p style="font-size: 1rem; opacity: 0.9;">Secure, Transparent, and Immutable Tourist Identity Management powered by Ethereum Blockchain Technology</p>
+            <h3>VIKRANTA - Smart Tourist Safety System</h3>
+            <p>Blockchain-Powered Identity Verification & Real-Time Safety Platform</p>
+            <p style="font-size: 1rem; opacity: 0.9;">Comprehensive Tourist Protection System combining Ethereum Blockchain Identity Registry, AI-Powered Safety Intelligence, Real-Time Emergency Response & Geospatial Tracking</p>
             <div class="cta-buttons">
                 <a href="portal.html" class="btn btn-primary">
                     <span>📋</span> Official Portal
                 </a>
                 <a href="https://thorough-reflection-production-1bb6.up.railway.app/" class="btn btn-secondary">
-                    <span>🔐</span> Tourist Login
+                    <span>�</span> Tourist 
                 </a>
             </div>
         </div>
@@ -493,32 +553,32 @@
         <div class="container">
             <h2>About VIKRANTA System</h2>
             <p style="text-align: center; color: var(--dark-gray); font-size: 1.1rem; margin-bottom: var(--spacing-xl); max-width: 900px; margin-left: auto; margin-right: auto;">
-                The VIKRANTA Government Tourist Registry System is an advanced blockchain-based platform designed to provide secure, transparent, and efficient identity management for tourists visiting India.
+                VIKRANTA is India's first comprehensive Smart Tourist Safety & Incident Response System that combines blockchain-based identity verification with real-time emergency response, AI-powered safety intelligence, and geospatial tracking to ensure complete tourist protection.
             </p>
             
             <div class="about-content">
                 <div class="about-text">
-                    <p><strong>🎯 Mission:</strong> To revolutionize tourist identity management through cutting-edge blockchain technology, ensuring authenticity, security, and ease of verification for both tourists and government authorities.</p>
-                    <p><strong>🔒 Security:</strong> All tourist records are stored immutably on the Ethereum blockchain, ensuring tamper-proof documentation and complete transparency in the verification process.</p>
+                    <p><strong>🎯 Dual-Layer Protection:</strong> Layer 1 provides blockchain-based identity verification with immutable records on Ethereum, ensuring authenticity and tamper-proof documentation. Layer 2 delivers real-time safety through GPS tracking, intelligent geofencing, and instant emergency response coordination.</p>
+                    <p><strong>🔒 Security Excellence:</strong> All tourist identities are secured on Ethereum blockchain with AES-256 encryption, IPFS document storage, and cryptographic verification. Real-time location data protected with JWT authentication and WebSocket encryption ensuring complete privacy.</p>
                 </div>
                 <div class="about-text">
-                    <p><strong>🌐 Technology:</strong> Built on Ethereum smart contracts with IPFS integration for secure document storage, providing a decentralized and reliable infrastructure for identity management.</p>
-                    <p><strong>✓ Verification:</strong> Instant verification through QR codes and unique identifiers, enabling seamless authentication at checkpoints, hotels, and tourist destinations across the country.</p>
+                    <p><strong>🌐 Advanced Technology Stack:</strong> Ethereum smart contracts with Web3.js integration, PostgreSQL with PostGIS for spatial queries, Flask + React architecture, Gemini AI for cultural recommendations, and Mapbox GL for interactive geospatial visualization across India.</p>
+                    <p><strong>✓ Smart Features:</strong> Instant verification through QR codes, real-time GPS tracking with geofencing alerts, AI-powered cultural guides, multi-channel emergency notifications (WebSocket, SMS, Email), and authority dashboard for incident management with live updates.</p>
                 </div>
             </div>
 
             <div class="stats">
                 <div class="stat-card">
                     <div class="stat-number">100%</div>
-                    <div class="stat-label">Blockchain Secured</div>
+                    <div class="stat-label">Blockchain Secured Records</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">24/7</div>
-                    <div class="stat-label">System Availability</div>
+                    <div class="stat-label">Real-Time Monitoring</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Immutable Records</div>
+                    <div class="stat-number">&lt;2s</div>
+                    <div class="stat-label">Emergency Response Time</div>
                 </div>
             </div>
         </div>
@@ -527,46 +587,82 @@
     <!-- Features Section -->
     <section class="features" id="features" style="background: var(--light-gray);">
         <div class="container">
-            <h2>System Features</h2>
+            <h2>Comprehensive System Features</h2>
             <p style="text-align: center; color: var(--dark-gray); font-size: 1.1rem; margin-bottom: var(--spacing-xl);">
-                Comprehensive blockchain-powered features for modern identity management
+                Dual-powered platform combining blockchain identity verification with real-time safety intelligence
             </p>
             
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="icon">🔐</div>
-                    <h3>Blockchain Security</h3>
-                    <p>All records stored on Ethereum blockchain with cryptographic security and immutable data storage</p>
+                    <h3>Blockchain Identity Registry</h3>
+                    <p>Immutable tourist records on Ethereum with AES-256 encryption, unique ID generation, and cryptographic verification ensuring tamper-proof identity management</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">🚨</div>
+                    <h3>Emergency Panic Button (SOS)</h3>
+                    <p>Instant emergency alerts with GPS location broadcast to all authorities via WebSocket, SMS, and email with real-time incident tracking and response coordination</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">�</div>
+                    <h3>Real-Time GPS Tracking</h3>
+                    <p>Continuous location monitoring with PostGIS spatial queries, geofence proximity alerts, and location history for enhanced tourist safety across India</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">🗺️</div>
+                    <h3>Intelligent Geofencing</h3>
+                    <p>Polygon-based safety zones (Tourist Areas, Restricted Zones, Safe Zones) with automatic alerts when entering/exiting zones and risk level indicators</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>AI-Powered Cultural Guide</h3>
+                    <p>Gemini AI integration providing nearby cultural recommendations, dynamic safety zone generation for any location, and multi-language tourist guidance</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="icon">📱</div>
-                    <h3>QR Code Verification</h3>
-                    <p>Instant verification through secure QR codes for quick authentication at any checkpoint</p>
+                    <h3>QR Code & PVC Card</h3>
+                    <p>Downloadable PVC identity cards with embedded QR codes for instant offline verification at checkpoints, hotels, and tourist destinations</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="icon">🌐</div>
-                    <h3>IPFS Integration</h3>
-                    <p>Decentralized document storage using IPFS ensuring permanent and accessible records</p>
+                    <h3>IPFS Document Storage</h3>
+                    <p>Decentralized document storage with content-addressed hashing ensuring permanent accessibility and tamper-proof document verification</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">👮</div>
+                    <h3>Authority Dashboard</h3>
+                    <p>Real-time incident monitoring with Mapbox visualization, WebSocket live updates, tourist tracking, incident management, and responder communication system</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="icon">🔔</div>
+                    <h3>Multi-Channel Notifications</h3>
+                    <p>Instant alerts via WebSocket real-time push, SMS through Twilio, email notifications, and in-app messaging for comprehensive emergency communication</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="icon">🎫</div>
                     <h3>Unique ID System</h3>
-                    <p>Short, memorable unique identifiers for easy login and record retrieval</p>
+                    <p>Short, memorable unique identifiers for easy login, blockchain record retrieval, and seamless verification across the entire VIKRANTA ecosystem</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="icon">✓</div>
-                    <h3>Authority Verification</h3>
-                    <p>Multi-level authority system for document verification and approval workflows</p>
+                    <h3>Multi-Level Verification</h3>
+                    <p>Authority-based approval workflows with pending/verified/rejected status tracking, document upload verification, and expiration date management</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="icon">📊</div>
-                    <h3>Real-Time Dashboard</h3>
-                    <p>Comprehensive dashboard with document status tracking and verification history</p>
+                    <h3>Real-Time Analytics Dashboard</h3>
+                    <p>Comprehensive monitoring with live incident feed, tourist location maps, verification statistics, emergency response metrics, and audit trail tracking</p>
                 </div>
             </div>
         </div>
@@ -587,7 +683,7 @@
             <a href="https://thorough-reflection-production-1bb6.up.railway.app/" class="action-btn-large official-btn-large">
                 <div class="action-btn-icon-large">💼</div>
                 <div>Tourist</div>
-                <div style="font-size: 0.8rem; font-weight: 400; margin-top: 8px; opacity: 0.9;">Official Access</div>
+                <div style="font-size: 0.8rem; font-weight: 400; margin-top: 8px; opacity: 0.9;">Tourist Website</div>
             </a>
         </div>
     </section>
@@ -645,7 +741,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 VIKRANTA - Government Tourist Registry System. All rights reserved.</p>
+                <p>&copy; 2025 VIKRANTA - Smart Tourist Safety System. All rights reserved.</p>
                 <p style="margin-top: var(--spacing-xs);">Powered by Ethereum Blockchain | Ministry of Tourism, Government of India</p>
             </div>
             
@@ -757,6 +853,26 @@
                 }
             });
         });
+
+        // Video Pause Control - Wait 3 seconds after video ends before replaying
+        const heroVideo = document.getElementById('heroVideo');
+        
+        if (heroVideo) {
+            heroVideo.addEventListener('ended', function() {
+                // Wait 3 seconds before restarting the video
+                setTimeout(function() {
+                    heroVideo.currentTime = 0;
+                    heroVideo.play().catch(function(error) {
+                        console.log('Video play prevented:', error);
+                    });
+                }, 3000); // 3 seconds pause
+            });
+
+            // Ensure video plays on page load
+            heroVideo.play().catch(function(error) {
+                console.log('Initial video play prevented:', error);
+            });
+        }
     </script>
 </body>
 </html>

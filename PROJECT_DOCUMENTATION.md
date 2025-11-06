@@ -1,7 +1,8 @@
 # VIKRANTA - Project Documentation
 
 Version: 1.0.0
-Date: 2025-11-05
+Date: 2025-11-06
+Last Updated: November 6, 2025
 
 This document provides a complete, consolidated description of the VIKRANTA Tourist Registry System — its purpose, architecture, design, implementation details, technology stack, security posture, deployment and operational notes, testing strategy, and recommended next steps.
 
@@ -22,7 +23,59 @@ Primary goals:
 ## 2. Existing System vs Present (This Implementation)
 
 - Existing (Problem space): Manual tourist registrations and paper-based identity verification. Lack of portable cryptographic verification, centralized tamper-prone storage, and weak audit trails.
-- Present (This project): A decentralized, auditable tourist registry with clear verification workflows, authority controls, downloadable PVC cards and QR codes, encryption, and hardened deployment in Docker + Nginx.
+- Present (This project): A decentralized, auditable tourist registry with clear verification workflows, authority controls, downloadable PVC cards and QR codes, encryption, and hardened deployment in Docker + Nginx. Features modern UI with video background, responsive design, and professional government aesthetic.
+
+### Recent Updates (Version 1.0.0 - November 6, 2025)
+
+#### Frontend Enhancements
+1. **Video Background Implementation**
+   - Added professional video background to hero section (`background-video.mp4`, 2.77 MB, 15-second duration)
+   - Implemented JavaScript-controlled playback with 3-second pause after each loop
+   - Video overlay with gradient for text readability
+   - Supports multiple formats (MP4, WebM) with fallback
+
+2. **Responsive Typography System**
+   - Implemented fluid font sizing using CSS `clamp()` function
+   - Three responsive breakpoints:
+     - Desktop: `clamp(1.5rem, 4.5vw, 4rem)` with 20px edge padding
+     - Tablet (768px): `clamp(1.2rem, 4vw, 2rem)` with 15px edge padding
+     - Mobile (480px): `clamp(1rem, 3.5vw, 1.5rem)` with 10px edge padding
+   - Prevents text cutoff at screen edges with proper padding
+   - Single-line title display with `white-space: nowrap`
+
+3. **Hero Section Improvements**
+   - Changed title from gradient text to solid white (`#ffffff`) for better visibility
+   - Enhanced text shadow for better contrast against video background
+   - Updated heading hierarchy to use `<h3>` for SEO and accessibility
+   - Improved subtitle and description copy to highlight dual-system architecture
+
+4. **Content Updates**
+   - Merged VIKRANTA Smart Tourist Safety System information
+   - Updated hero section to showcase both:
+     - Layer 1: Blockchain-based identity verification
+     - Layer 2: Real-time safety monitoring and emergency response
+   - Expanded features section from 6 to 12 feature cards
+   - Updated statistics to reflect combined capabilities:
+     - "100% Blockchain Secured Records"
+     - "24/7 Real-Time Monitoring"
+     - "<2s Emergency Response Time"
+
+5. **About Section Enhancement**
+   - Rewritten to explain dual-layer protection system
+   - Added comprehensive technology stack description
+   - Included information about:
+     - Ethereum blockchain with Web3.js integration
+     - Real-time GPS tracking with PostGIS
+     - Flask + React architecture
+     - Gemini AI for cultural recommendations
+     - Mapbox GL for geospatial visualization
+
+#### Technical Improvements
+- Removed logo transition feature (simplified startup sequence)
+- Optimized CSS for performance and maintainability
+- Improved mobile menu with hamburger navigation
+- Enhanced footer with social media links and system credentials
+- Added authority section toggle for government certifications
 
 ## 2.1 Focused Domains & Core Domains
 
@@ -606,14 +659,26 @@ This section explains each major file/directory, its purpose, and why it exists 
 ### Frontend (`frontend/`)
 
 **File: `home.html`**
-- **Purpose**: Landing page with project overview
-- **Why Used**: First impression, marketing, navigation hub
+- **Purpose**: Landing page with project overview and video background
+- **Why Used**: First impression, marketing, navigation hub with professional presentation
 - **Features**:
-  - Hero section with call-to-action
-  - Feature highlights (blockchain, security, QR codes)
-  - Statistics section
+  - Hero section with video background and call-to-action
+  - Video playback control (15-second play, 3-second pause, repeat)
+  - Responsive hero title with fluid typography
+  - Feature highlights covering 12 key features (blockchain + real-time safety)
+  - Statistics section with animated cards
+  - Dual-system overview (blockchain identity + safety monitoring)
   - Social media links in footer
-  - Logo branding
+  - Logo branding with government aesthetic
+  - Hidden authority credentials section
+- **Recent Updates (v1.0.0)**:
+  - Added video background with `<video>` element and overlay gradient
+  - Implemented JavaScript pause control for looping
+  - Updated hero title to h3: "VIKRANTA - Smart Tourist Safety System"
+  - Solid white text color with strong shadow for video background visibility
+  - Responsive font sizing preventing text cutoff on all screen sizes
+  - Expanded from 6 to 12 feature cards covering comprehensive system
+  - Updated statistics to show combined blockchain + safety metrics
 
 **File: `index.html`**
 - **Purpose**: Redirect page to `home.html`
@@ -670,16 +735,37 @@ This section explains each major file/directory, its purpose, and why it exists 
 **Directory: `css/`**
 
 **File: `style.css`**
-- **Purpose**: Global styles for all pages
-- **Why Used**: Consistent branding and responsive design
+- **Purpose**: Global styles for all pages with comprehensive responsive design system
+- **Why Used**: Consistent branding and responsive design across all viewports and devices
 - **Features**:
-  - CSS variables for theming (colors, spacing, shadows)
-  - Government color scheme (navy, gold, white)
-  - Responsive grid layouts
-  - Button styles and hover effects
-  - Logo and navbar styling
-  - Animation keyframes
-- **Design Philosophy**: Professional government aesthetic, modern and futuristic
+  - CSS custom properties (variables) for theming (colors, spacing, shadows, gradients)
+  - Government color scheme (navy #001F54, gold #D4AF37, white #FFFFFF)
+  - Responsive grid layouts with auto-fit/auto-fill
+  - Button styles and hover effects with transform animations
+  - Logo and navbar styling with gradient backgrounds
+  - Mobile-first responsive breakpoints (768px tablet, 480px mobile)
+  - Animation keyframes for smooth transitions
+  - Glass morphism and gradient effects
+- **Recent Updates (v1.0.0)**:
+  - **Video Background Styles**: 
+    * `.video-background` container with absolute positioning
+    * Video element: `object-fit: cover`, centered with CSS transform
+    * Gradient overlay for text readability
+    * Z-index layering system for proper stacking
+  - **Responsive Hero Typography System**:
+    * Desktop: `font-size: clamp(1.5rem, 4.5vw, 4rem)` with 20px padding
+    * Tablet (≤768px): `font-size: clamp(1.2rem, 4vw, 2rem)` with 15px padding
+    * Mobile (≤480px): `font-size: clamp(1rem, 3.5vw, 1.5rem)` with 10px padding
+    * Universal heading selector: `.hero h1, .hero h2, .hero h3`
+  - **Text Visibility Enhancements**:
+    * Solid white text (`#ffffff`) instead of gradient for better readability
+    * Enhanced shadow: `2px 4px 8px rgba(0, 0, 0, 0.5)`
+    * Single-line with `white-space: nowrap` and proper overflow handling
+    * Edge padding prevents text cutoff on all screen sizes
+  - **Mobile Navigation**: Hamburger menu with slide-in animation
+  - **Feature Cards**: Extended grid to support 12 cards with enhanced hover effects
+- **Design Philosophy**: Professional government aesthetic, modern and futuristic, fully accessible
+- **Performance**: GPU-accelerated animations, optimized for mobile devices
 
 **Directory: `js/`**
 
@@ -1274,7 +1360,225 @@ npm run e2e
 
 ---
 
-## 22. Appendix - Key Code References
+## 22. Video Background Implementation (v1.0.0)
+
+### Overview
+The home page features a professional video background in the hero section to enhance visual appeal and provide a modern, dynamic first impression for visitors.
+
+### Technical Specifications
+
+**Video File Details:**
+- **Filename**: `background-video.mp4`
+- **Location**: `/frontend/background-video.mp4`
+- **Size**: 2.77 MB
+- **Format**: MP4 (H.264 codec recommended)
+- **Duration**: 15 seconds
+- **Resolution**: Recommended 1920x1080 (Full HD) or higher
+- **Fallback Format**: WebM for browser compatibility
+
+**HTML Implementation:**
+```html
+<div class="video-background">
+    <video id="heroVideo" autoplay muted playsinline>
+        <source src="background-video.mp4" type="video/mp4">
+        <source src="background-video.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+</div>
+```
+
+**CSS Styling:**
+```css
+.hero {
+    position: relative;
+    overflow: hidden;
+    background: none !important; /* Override default gradient */
+}
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 0;
+}
+
+.video-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(0, 31, 84, 0.75) 0%, 
+        rgba(0, 61, 130, 0.65) 50%, 
+        rgba(0, 102, 204, 0.55) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 10;
+}
+```
+
+**JavaScript Playback Control:**
+```javascript
+const heroVideo = document.getElementById('heroVideo');
+
+if (heroVideo) {
+    heroVideo.addEventListener('ended', function() {
+        // Wait 3 seconds before restarting the video
+        setTimeout(function() {
+            heroVideo.currentTime = 0;
+            heroVideo.play().catch(function(error) {
+                console.log('Video play prevented:', error);
+            });
+        }, 3000); // 3 seconds pause
+    });
+
+    // Ensure video plays on page load
+    heroVideo.play().catch(function(error) {
+        console.log('Initial video play prevented:', error);
+    });
+}
+```
+
+### Playback Behavior
+1. **Auto-start**: Video begins playing automatically when page loads (muted for browser policy compliance)
+2. **15-second playback**: Video plays for its full 15-second duration
+3. **3-second pause**: After video ends, system waits 3 seconds before restarting
+4. **Loop**: Process repeats indefinitely (play → pause → play)
+5. **Error handling**: Catches and logs browser autoplay policy violations
+
+### Design Considerations
+
+**Accessibility:**
+- Video is muted to comply with browser autoplay policies
+- Content is not dependent on video (text remains readable even if video fails)
+- Fallback background color in case video doesn't load
+
+**Performance:**
+- Optimized file size (2.77 MB) for fast loading
+- Uses `playsinline` attribute for iOS compatibility
+- Video compressed with appropriate codec settings
+
+**Browser Compatibility:**
+- Primary format: MP4 (H.264) for widest support
+- Fallback format: WebM for modern browsers
+- Graceful degradation: Text message for unsupported browsers
+
+**Responsive Design:**
+- `object-fit: cover` ensures video fills container on all screen sizes
+- Video maintains aspect ratio without distortion
+- Overlay gradient ensures text readability on all video frames
+
+### Future Enhancements
+- Add video quality selection based on connection speed
+- Implement lazy loading for below-the-fold content
+- Consider adding poster image for faster perceived load time
+- Option to pause/play video manually (accessibility feature)
+
+---
+
+## 23. Responsive Typography System (v1.0.0)
+
+### Overview
+Implemented a comprehensive fluid typography system using CSS `clamp()` function to ensure the hero title "VIKRANTA - Smart Tourist Safety System" displays perfectly on all screen sizes without text cutoff.
+
+### Problem Statement
+Initial implementation faced challenges:
+- Text cutoff at screen edges on narrow viewports
+- Fixed font sizes didn't scale appropriately
+- Gradient text with `-webkit-text-fill-color: transparent` caused visibility issues
+- Long title needed to display on single line across all devices
+
+### Solution Architecture
+
+**Fluid Font Sizing with clamp():**
+```css
+font-size: clamp(minimum, preferred, maximum);
+```
+- **minimum**: Smallest font size (prevents too-small text)
+- **preferred**: Viewport-width-based sizing (fluid scaling)
+- **maximum**: Largest font size (prevents too-large text)
+
+### Implementation Details
+
+**Desktop Breakpoint (default, >768px):**
+```css
+.hero h1, .hero h2, .hero h3 {
+    font-size: clamp(1.5rem, 4.5vw, 4rem);
+    color: #ffffff;
+    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    overflow: visible;
+    text-align: center;
+    padding: 0 20px;
+}
+```
+
+**Tablet Breakpoint (≤768px):**
+```css
+@media (max-width: 768px) {
+    .hero h1, .hero h2, .hero h3 {
+        font-size: clamp(1.2rem, 4vw, 2rem);
+        padding: 0 15px;
+    }
+}
+```
+
+**Mobile Breakpoint (≤480px):**
+```css
+@media (max-width: 480px) {
+    .hero h1, .hero h2, .hero h3 {
+        font-size: clamp(1rem, 3.5vw, 1.5rem);
+        padding: 0 10px;
+        letter-spacing: -0.5px;
+    }
+}
+```
+
+### Key Features
+
+1. **Heading Hierarchy Flexibility**: Universal selector allows semantic HTML changes
+2. **Single-Line Display**: `white-space: nowrap` prevents text wrapping
+3. **Edge Padding**: Prevents text cutoff (20px desktop, 15px tablet, 10px mobile)
+4. **Text Visibility**: Solid white color with enhanced shadow for video background
+5. **Letter Spacing Optimization**: Tighter spacing on mobile for better fit
+
+### Font Size Scaling
+
+| Viewport | Desktop | Tablet | Mobile |
+|----------|---------|--------|--------|
+| 320px | - | - | 16px (1rem) |
+| 768px | - | 32px (4vw) | - |
+| 1920px | 64px (4rem) | - | - |
+
+### Browser Compatibility
+- Supported: Chrome 79+, Firefox 75+, Safari 13.1+, Edge 79+
+- Progressive enhancement for older browsers
+
+---
+
+## 24. Appendix - Key Code References
 
 - Smart contract: `contracts/TouristRegistry.sol`
 - Backend entry: `backend/server.js`
@@ -1285,4 +1589,8 @@ npm run e2e
 
 ---
 
-Document generated automatically from repository analysis on 2025-11-05. Use this as living documentation and update it when architecture or implementation changes.
+Document generated automatically from repository analysis on 2025-11-05.
+**Last Updated**: November 6, 2025 (v1.0.0)
+**Major Updates**: Video background implementation, responsive typography system, content merger for dual-system architecture
+
+Use this as living documentation and update it when architecture or implementation changes.
