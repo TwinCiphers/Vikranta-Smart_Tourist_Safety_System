@@ -5,9 +5,8 @@ A complete blockchain-based decentralized tourist registration system with uniqu
 [![Security Score](https://img.shields.io/badge/Security-10%2F10-brightgreen)]()
 [![Blockchain](https://img.shields.io/badge/Blockchain-Ethereum-blue)]()
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)]()
-[![License](https://img.shields.io/badge/License-MIT-green)]()
+[![License](https://img.shields.io/badge/License-Appache2.0-green)]()
 ![Build Status](https://img.shields.io/github/workflow/status/TwinCiphers/Vikranta-Smart_Tourist_Safety_System/main)
-![License](https://img.shields.io/github/license/TwinCiphers/Vikranta-Smart_Tourist_Safety_System)
 ![Last Commit](https://img.shields.io/github/last-commit/TwinCiphers/Vikranta-Smart_Tourist_Safety_System)
 ![Issues](https://img.shields.io/github/issues/TwinCiphers/Vikranta-Smart_Tourist_Safety_System)
 ![Contributors](https://img.shields.io/github/contributors/TwinCiphers/Vikranta-Smart_Tourist_Safety_System)
@@ -16,7 +15,7 @@ A complete blockchain-based decentralized tourist registration system with uniqu
 
 ---
 ## For Tourist Safety System
-visit repo [Vikranta-MVP](https://github.com/Bhanucreator/vikranta-mvp)
+visit repo [Vikranta-MVP](https://github.com/Bhanucreator/vikranta-mvp) <br>
 WebAPP Link : [VIKRANTA](https://thorough-reflection-production-1bb6.up.railway.app/)
 
 ## 📑 Table of Contents
