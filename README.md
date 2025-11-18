@@ -17,6 +17,19 @@ A complete blockchain-based decentralized tourist registration system with uniqu
 visit repo [Vikranta-MVP](https://github.com/Bhanucreator/vikranta-mvp) <br>
 WebAPP Link : [VIKRANTA](https://thorough-reflection-production-1bb6.up.railway.app/)
 
+## Authors
+Author Name: DEEPAK P S <br>
+Mail id : deepakkrishnark@gmail.com
+
+Author Name: Bhanu kiran R <br>
+Mail id : bhanukiran90216@gmail.com
+
+Author Name: Amruth K A <br>
+Mail id : kaamruth0@gmail.com
+
+Author Name: Anil Yalappa Jogi <br>
+Mail id : jogianil991@gmail.com
+
 ## 📑 Table of Contents
 
 1. [Features](#-features)
