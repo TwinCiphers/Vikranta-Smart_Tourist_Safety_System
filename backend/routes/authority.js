@@ -88,9 +88,12 @@ router.post('/login', checkBan, async (req, res) => {
                 const addAuthorityTx = touristRegistryContract.methods.addAuthority(address);
                 const gas = await addAuthorityTx.estimateGas({ from: adminAccount });
                 
+                // Convert BigInt to Number before calculation
+                const gasLimit = Math.floor(Number(gas) * 1.2);
+                
                 await addAuthorityTx.send({
                     from: adminAccount,
-                    gas: Math.floor(gas * 1.2)
+                    gas: gasLimit
                 });
                 
                 console.log('✅ Successfully added as authority!');

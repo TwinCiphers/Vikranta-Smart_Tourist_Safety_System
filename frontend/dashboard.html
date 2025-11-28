@@ -381,6 +381,13 @@
         async function loadTouristData() {
             try {
                 const response = await fetch(`${API_URL}/api/tourist/info/${uniqueId}`);
+                
+                // Check if response is valid JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Backend server is not running. Please start the backend server and refresh this page.');
+                }
+                
                 const data = await response.json();
 
                 if (data.success && data.data) {

@@ -326,6 +326,12 @@
                     body: JSON.stringify(formData)
                 });
 
+                // Check if response is valid JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Backend server is not running or returned invalid response');
+                }
+
                 const data = await response.json();
 
                 if (data.success) {
@@ -399,6 +405,13 @@
             try {
                 // Verify the unique ID exists in the blockchain
                 const response = await fetch(`${API_URL}/api/tourist/info/${uniqueId}`);
+                
+                // Check if response is valid JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Backend server is not running or returned invalid response');
+                }
+                
                 const data = await response.json();
 
                 if (data.success && data.data && data.data.name) {

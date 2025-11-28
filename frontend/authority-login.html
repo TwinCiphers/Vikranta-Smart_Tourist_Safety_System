@@ -221,6 +221,18 @@
                     })
                 });
 
+                // Check if response is ok and content-type is JSON
+                if (!response.ok && response.status === 0) {
+                    throw new Error('Backend server is not running. Please start the backend server.');
+                }
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    console.error('Non-JSON response:', text);
+                    throw new Error('Server returned invalid response. Expected JSON but got: ' + text.substring(0, 100));
+                }
+
                 const result = await response.json();
                 console.log('Authority login result:', result);
 
